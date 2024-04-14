@@ -9,8 +9,14 @@ import { useForm } from "@mantine/form";
 import useMutate from "@/hooks/useMutate";
 import dayjs from "dayjs";
 import { roleData } from "@/data/roles";
+import { useState } from "react";
+import { Group, Switch, useMantineTheme } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 const Create = () => {
+  const theme = useMantineTheme();
+  const [isFullDay, setIsFullDay] = useState<boolean>(false);
+
   const form = useForm<any>({
     initialValues: {
       title: "",
@@ -34,9 +40,14 @@ const Create = () => {
   const onSubmitHandler = (values: any) => {
     const newItem = {
       ...values,
-      start_date: dayjs(values.start_date).format("DD-MM-YYYY HH:mm"),
-      end_date: dayjs(values.end_date).format("DD-MM-YYYY HH:mm"),
+      start_date: isFullDay
+        ? dayjs(values.start_date).startOf("day").format("DD-MM-YYYY HH:mm")
+        : dayjs(values.start_date).format("DD-MM-YYYY HH:mm"),
+      end_date: isFullDay
+        ? dayjs(values.end_date).endOf("day").format("DD-MM-YYYY HH:mm")
+        : dayjs(values.end_date).format("DD-MM-YYYY HH:mm"),
     };
+
     onSubmit("/academic-calendar-events", newItem);
   };
   //
@@ -57,15 +68,14 @@ const Create = () => {
       }}
     >
       <div className="grid md:grid-cols-2 grid-cols-1 gap-7">
-        <div className="md:col-span-2 col-span-1">
-          <TextInputComponent
-            label="Title"
-            placeholder="Enter title"
-            withAsterisk
-            form={form}
-            name="title"
-          />
-        </div>
+        <TextInputComponent
+          label="Title"
+          placeholder="Enter title"
+          withAsterisk
+          form={form}
+          name="title"
+        />
+
         <SelectComponent
           label="Type"
           placeholder="Select type"
@@ -79,6 +89,7 @@ const Create = () => {
           form={form}
           name="type"
         />
+
         <SelectComponent
           label="Role"
           placeholder="Select role"
@@ -87,6 +98,34 @@ const Create = () => {
           form={form}
           name="role_id"
         />
+
+        <div className="pt-8">
+          <Group position="left">
+            <Switch
+              checked={isFullDay}
+              onChange={(event) => setIsFullDay(event.currentTarget.checked)}
+              color="teal"
+              size="md"
+              label="Set as full day"
+              thumbIcon={
+                isFullDay ? (
+                  <IconCheck
+                    size="0.8rem"
+                    color={theme.colors.teal[theme.fn.primaryShade()]}
+                    stroke={3}
+                  />
+                ) : (
+                  <IconX
+                    size="0.8rem"
+                    color={theme.colors.red[theme.fn.primaryShade()]}
+                    stroke={3}
+                  />
+                )
+              }
+            />
+          </Group>
+        </div>
+
         <DateTimeInputComponent
           placeholder="Choose start date"
           label="Start Date"
@@ -101,6 +140,7 @@ const Create = () => {
           form={form}
           name="end_date"
         />
+
         <div className="md:col-span-2 col-span-1">
           <TextAreaComponent
             label="Description"

@@ -31,6 +31,7 @@ export default function DateTimeInputComponent({
         label: `sm:text-[16px] text-[14px] mb-1`,
         input: "h-[35px]",
         placeholder: "text-base",
+        weekday: "!text-black",
       }}
       name={name}
       {...form?.getInputProps(name as string)}
