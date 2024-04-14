@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ActionIcon, Menu } from "@mantine/core";
+import { ActionIcon, Menu, Skeleton } from "@mantine/core";
 import { IconAdjustments } from "@tabler/icons-react";
 
 import TextInputComponent from "@/components/inputs/TextInputComponent";
@@ -12,17 +12,23 @@ interface PropsType {
   children: React.ReactNode;
   gradeId?: string;
   setSubjectId?: (x: string) => void;
+  search?: string;
+  setSearch?: (x: string) => void;
 }
 
 const SubjectLayout: React.FC<PropsType> = ({
   children,
   gradeId,
   setSubjectId,
+  search,
+  setSearch,
 }) => {
   const [activeSubject, setActiveSubject] = useState<string | null>("");
   const [activeSection, setActiveSection] = useState<string | null>("");
 
-  const { data: subjects } = useQuery(`/subjects?filter[grade_id]=${gradeId}`);
+  const { data: subjects, isLoading } = useQuery(
+    `/subjects?filter[grade_id]=${gradeId}`
+  );
   const { data: sections } = useQuery(`/sections?filter[grade_id]=${gradeId}`);
 
   useEffect(() => {
@@ -53,6 +59,13 @@ const SubjectLayout: React.FC<PropsType> = ({
           }}
         >
           <Tabs.List>
+            {isLoading &&
+              [0, 1, 2, 3, 4, 5]?.map((id) => (
+                <Tabs.Tab key={id} value={`${id}`}>
+                  <Skeleton height={15} width={30} />
+                </Tabs.Tab>
+              ))}
+
             {subjects?.map((subject: any) => (
               <Tabs.Tab key={subject.id} value={subject.id}>
                 {subject.name}
@@ -65,6 +78,8 @@ const SubjectLayout: React.FC<PropsType> = ({
           <TextInputComponent
             placeholder="Search ..."
             inputClassName="sm:w-[350px] w-full"
+            value={search}
+            onChange={(e) => setSearch && setSearch(e?.target?.value)}
           />
 
           <Menu position="bottom-end" shadow="md" width={200}>

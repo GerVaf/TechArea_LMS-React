@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 
 interface PropsType extends ReactPlayerProps {
@@ -15,6 +16,7 @@ const VideoPlayer: React.FC<PropsType> = ({
   controls = true,
   ...props
 }) => {
+  const videoRef = useRef<any>(null);
   const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => setIsError(false), [url]);
@@ -41,6 +43,7 @@ const VideoPlayer: React.FC<PropsType> = ({
     border-opacity-10 rounded h-[300px]"
     >
       <ReactPlayer
+        ref={videoRef}
         {...props}
         url={url}
         controls={controls}

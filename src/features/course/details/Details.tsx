@@ -6,6 +6,8 @@ import DetailsLayout from "@/components/layouts/DetailsLayout";
 import CourseInformation from "./components/CourseInformation";
 import CourseContent from "./components/CourseContent";
 import useQuery from "@/hooks/useQuery";
+import { Tabs } from "@mantine/core";
+import LearningStudents from "./components/LearningStudents";
 
 const Details = () => {
   const { courseId } = useParams();
@@ -47,7 +49,20 @@ const Details = () => {
       </div>
 
       <div className="mt-4">
-        <CourseContent data={data?.course_contents} />
+        <Tabs defaultValue="contents">
+          <Tabs.List>
+            <Tabs.Tab value="contents">Course Contents</Tabs.Tab>
+            <Tabs.Tab value="students">Learning Students</Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="contents" pt="xs">
+            <CourseContent data={data?.course_contents} />
+          </Tabs.Panel>
+
+          <Tabs.Panel value="students" pt="xs">
+            <LearningStudents />
+          </Tabs.Panel>
+        </Tabs>
       </div>
     </DetailsLayout>
   );
