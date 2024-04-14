@@ -2,7 +2,7 @@ import { BiMenuAltRight } from "react-icons/bi";
 import { navbarData } from "../data";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { HiEnvelope } from "react-icons/hi2";
-import Logo from "../../../assets/better-change-text-logo.png";
+import Logo from "@/assets/better-change-text-logo.png";
 import { useEffect, useMemo, useState } from "react";
 import { FiLogIn } from "react-icons/fi";
 import { Link } from "react-router-dom";

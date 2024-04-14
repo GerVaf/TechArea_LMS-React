@@ -7,6 +7,7 @@ import { Tabs } from "@mantine/core";
 import useQuery from "@/hooks/useQuery";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import MyPagination from "../common/MyPagination";
 
 interface PropsType {
   children: React.ReactNode;
@@ -14,6 +15,8 @@ interface PropsType {
   setSubjectId?: (x: string) => void;
   search?: string;
   setSearch?: (x: string) => void;
+  setPage?: (x: number) => void;
+  total?: number;
 }
 
 const SubjectLayout: React.FC<PropsType> = ({
@@ -22,9 +25,12 @@ const SubjectLayout: React.FC<PropsType> = ({
   setSubjectId,
   search,
   setSearch,
+  total = 0,
+  setPage,
 }) => {
   const [activeSubject, setActiveSubject] = useState<string | null>("");
   const [activeSection, setActiveSection] = useState<string | null>("");
+  const [value, setValue] = useState(1);
 
   const { data: subjects, isLoading } = useQuery(
     `/subjects?filter[grade_id]=${gradeId}`
@@ -78,7 +84,7 @@ const SubjectLayout: React.FC<PropsType> = ({
           <TextInputComponent
             placeholder="Search ..."
             inputClassName="sm:w-[350px] w-full"
-            value={search}
+            defaultValue={search}
             onChange={(e) => setSearch && setSearch(e?.target?.value)}
           />
 
@@ -111,6 +117,17 @@ const SubjectLayout: React.FC<PropsType> = ({
       </div>
 
       {children}
+
+      <div className="w-full flex justify-end">
+        <MyPagination
+          total={total ? total : 1}
+          value={value}
+          onChange={(val) => {
+            setValue(val);
+            setPage && setPage(val);
+          }}
+        />
+      </div>
     </div>
   );
 };
