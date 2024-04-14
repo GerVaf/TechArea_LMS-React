@@ -1,5 +1,6 @@
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
+import PDFViewer from "./PDFViewer";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface PropsType {
@@ -20,17 +21,7 @@ const MediaViewer: React.FC<PropsType> = ({ attachments }) => {
       case "gif":
         return <img src={attachment.url} alt={`File ID: ${attachment.id}`} />;
       case "pdf":
-        return (
-          <div className=" my-2">
-            <a
-              href={attachment?.url}
-              target="_blank"
-              className="text-sm font-[500] underline"
-            >
-              {attachment?.url}
-            </a>
-          </div>
-        );
+        return <PDFViewer url={attachment.url} name={attachment.id} />;
       case "mp4":
         return <video controls src={attachment.url} />;
       default:

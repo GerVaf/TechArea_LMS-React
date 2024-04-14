@@ -37,7 +37,10 @@ const CreateCourseContent: React.FC<PropsType> = ({ close }) => {
     },
   });
 
-  const [onSubmit, { isLoading }] = useMutate();
+  const [onSubmit, { isLoading }] = useMutate({
+    navigateBack: false,
+    callback: () => close(),
+  });
 
   const onSubmitHandler = (values: any) => {
     const formData = new FormData();

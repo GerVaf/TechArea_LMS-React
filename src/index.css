@@ -84,3 +84,11 @@ th {
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
   @apply h-[200px];
 }
+
+.text-desc > ol {
+  @apply !list-decimal;
+}
+
+.text-desc > ul {
+  @apply !list-disc;
+}

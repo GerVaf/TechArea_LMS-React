@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import ReactPlayer from "react-player";
+import ReactPlayer, { ReactPlayerProps } from "react-player";
 
-interface PropsType {
+interface PropsType extends ReactPlayerProps {
   type?: "video" | "youtube";
   url: string;
   autoPlay?: boolean;
+  controls?: boolean;
 }
 
 const VideoPlayer: React.FC<PropsType> = ({
   type = "youtube",
   url,
   autoPlay,
+  controls = true,
+  ...props
 }) => {
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -38,8 +41,9 @@ const VideoPlayer: React.FC<PropsType> = ({
     border-opacity-10 rounded h-[300px]"
     >
       <ReactPlayer
+        {...props}
         url={url}
-        controls
+        controls={controls}
         width="100%"
         playing={autoPlay}
         onError={() => setIsError(true)}

@@ -5,26 +5,43 @@ import MyButton from "@/components/buttons/MyButton";
 import Heading from "@/components/typography/Heading";
 import { useDisclosure } from "@mantine/hooks";
 import LearnCourseContentCard from "./LearnCourseContentCard";
-import React from "react";
+import React, { useMemo } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface PropsType {
   data: any;
+  completeIndex: number;
+  index: number;
 }
 
-const LearnCourseAccordion: React.FC<PropsType> = ({ data }) => {
+const LearnCourseAccordion: React.FC<PropsType> = ({
+  data,
+  completeIndex,
+  index,
+}) => {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const isDisabled = useMemo(
+    () => index > completeIndex,
+    [index, completeIndex]
+  );
 
   return (
     <>
       <Accordion.Item value={"customization" + Math.random()}>
         <Accordion.Control
-          className=" bg-primary-100 hover:bg-primary-100 hover:bg-opacity-50
-       bg-opacity-50 sm:!px-4 !px-2"
+          disabled={isDisabled}
+          className={twMerge(
+            " !bg-primary-100 bg-opacity-80  sm:!px-4 !px-2",
+            !isDisabled && "hover:!bg-primary-200"
+          )}
         >
           <div className="flex items-center gap-2">
             <p>{data?.name}</p>
 
-            <IoIosCheckmarkCircle size={20} className="text-primary-500" />
+            {data?.is_complete && (
+              <IoIosCheckmarkCircle size={20} className="text-primary-500" />
+            )}
           </div>
         </Accordion.Control>
         <Accordion.Panel bg="white">
@@ -60,7 +77,7 @@ const LearnCourseAccordion: React.FC<PropsType> = ({ data }) => {
           body: "px-0",
         }}
       >
-        <LearnCourseContentCard data={data} />
+        <LearnCourseContentCard data={data} onClose={close} />
       </Modal>
     </>
   );
