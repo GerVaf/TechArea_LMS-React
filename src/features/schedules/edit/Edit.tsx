@@ -10,6 +10,7 @@ import useMutate from "@/hooks/useMutate";
 import dayjs from "dayjs";
 import useQuery from "@/hooks/useQuery";
 import { useParams } from "react-router-dom";
+import { roleData } from "@/data/roles";
 
 const Edit = () => {
   const { scheduleId } = useParams();
@@ -20,6 +21,7 @@ const Edit = () => {
       start_date: "",
       end_date: "",
       description: "",
+      role_id: "",
     },
     validateInputOnBlur: true,
     validate: {
@@ -27,6 +29,7 @@ const Edit = () => {
       type: (value: string) => (value.length > 0 ? null : "Type is required"),
       start_date: (value: string) => (value ? null : "Start date is required"),
       end_date: (value: string) => (value ? null : "End date is required"),
+      role_id: (value: string) => (value ? null : "Role is required"),
     },
   });
 
@@ -37,6 +40,7 @@ const Edit = () => {
     (data) => {
       form.setValues({
         ...data,
+        role_id: JSON.stringify(data?.role_id),
         start_date: dayjs(data?.start_date, "DD MMM YYYY hh:mm A").toDate(),
         end_date: dayjs(data?.end_date, "DD MMM YYYY hh:mm A").toDate(),
       });
@@ -69,13 +73,15 @@ const Edit = () => {
       }}
     >
       <div className="grid md:grid-cols-2 grid-cols-1 gap-7">
-        <TextInputComponent
-          label="Title"
-          placeholder="Enter title"
-          withAsterisk
-          form={form}
-          name="title"
-        />
+        <div className="md:col-span-2 col-span-1">
+          <TextInputComponent
+            label="Title"
+            placeholder="Enter title"
+            withAsterisk
+            form={form}
+            name="title"
+          />
+        </div>
         <SelectComponent
           label="Type"
           placeholder="Select type"
@@ -88,6 +94,14 @@ const Edit = () => {
           withAsterisk
           form={form}
           name="type"
+        />
+        <SelectComponent
+          label="Role"
+          placeholder="Select role"
+          data={roleData}
+          withAsterisk
+          form={form}
+          name="role_id"
         />
         <DateTimeInputComponent
           placeholder="Choose start date"

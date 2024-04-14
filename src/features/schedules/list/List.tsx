@@ -21,9 +21,12 @@ const List = () => {
         <tr key={i}>
           <td className="m_td">{i + 1}</td>
           <td className="m_td">{element.title}</td>
-          <td className="m_td line-clamp-1 w-[200px] flex items-center">
-            {element.description}
+          <td className="m_td ">
+            <div className="w-[200px] flex items-center line-clamp-1">
+              {element.description}
+            </div>
           </td>
+          <td className="m_td">{element.role}</td>
           <td className="m_td">{element.start_date}</td>
           <td className="m_td">{element.end_date}</td>
           <td className="m_td">{element.type}</td>
@@ -32,7 +35,13 @@ const List = () => {
           <td className="m_td">
             <TableActions
               detailCb={() => navigate(`/schedules/details/${element.id}`)}
-              destroyCb={() => onSubmit(`/academic-calendar-events/${element.id}`, {}, "DELETE")}
+              destroyCb={() =>
+                onSubmit(
+                  `/academic-calendar-events/${element.id}`,
+                  {},
+                  "DELETE"
+                )
+              }
               editCb={() => navigate(`/schedules/edit/${element.id}`)}
             />
           </td>
@@ -65,6 +74,7 @@ const List = () => {
         tableHeads={[
           "Title",
           "Description",
+          "For",
           "Start Date",
           "End Date",
           "Type",

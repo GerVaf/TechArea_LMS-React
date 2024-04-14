@@ -8,6 +8,7 @@ import DateTimeInputComponent from "@/components/inputs/DateTimeInputComponent";
 import { useForm } from "@mantine/form";
 import useMutate from "@/hooks/useMutate";
 import dayjs from "dayjs";
+import { roleData } from "@/data/roles";
 
 const Create = () => {
   const form = useForm<any>({
@@ -17,6 +18,7 @@ const Create = () => {
       start_date: new Date(),
       end_date: new Date(),
       description: "",
+      role_id: "",
     },
     validateInputOnBlur: true,
     validate: {
@@ -24,6 +26,7 @@ const Create = () => {
       type: (value: string) => (value.length > 0 ? null : "Type is required"),
       start_date: (value: string) => (value ? null : "Start date is required"),
       end_date: (value: string) => (value ? null : "End date is required"),
+      role_id: (value: string) => (value ? null : "Role is required"),
     },
   });
 
@@ -34,7 +37,6 @@ const Create = () => {
       start_date: dayjs(values.start_date).format("DD-MM-YYYY HH:mm"),
       end_date: dayjs(values.end_date).format("DD-MM-YYYY HH:mm"),
     };
-    console.log(newItem);
     onSubmit("/academic-calendar-events", newItem);
   };
   //
@@ -55,13 +57,15 @@ const Create = () => {
       }}
     >
       <div className="grid md:grid-cols-2 grid-cols-1 gap-7">
-        <TextInputComponent
-          label="Title"
-          placeholder="Enter title"
-          withAsterisk
-          form={form}
-          name="title"
-        />
+        <div className="md:col-span-2 col-span-1">
+          <TextInputComponent
+            label="Title"
+            placeholder="Enter title"
+            withAsterisk
+            form={form}
+            name="title"
+          />
+        </div>
         <SelectComponent
           label="Type"
           placeholder="Select type"
@@ -74,6 +78,14 @@ const Create = () => {
           withAsterisk
           form={form}
           name="type"
+        />
+        <SelectComponent
+          label="Role"
+          placeholder="Select role"
+          data={roleData}
+          withAsterisk
+          form={form}
+          name="role_id"
         />
         <DateTimeInputComponent
           placeholder="Choose start date"
